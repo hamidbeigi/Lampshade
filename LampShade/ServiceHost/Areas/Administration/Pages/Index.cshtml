@@ -1,0 +1,201 @@
+﻿@page
+@using Newtonsoft.Json
+@using DNTPersianUtils.Core;
+
+@model Areas.Administration.Pages.IndexModel
+@{
+    ViewData["Title"] = "صفحه اصلی";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="page-title">داشبورد گزارشات</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="mini-stat clearfix bx-shadow">
+            <span class="mini-stat-icon bg-info">
+                <i class="ion-social-usd"></i>
+            </span>
+            <div class="mini-stat-info text-right text-muted">
+                <span class="counter">@Model.TotalSales</span>
+                کل فروش
+            </div>
+            <div class="tiles-progress">
+                <div class="m-t-20">
+                    <h5 class="text-uppercase">کل فروش <span class="pull-right">@Model.TotalSales%</span></h5>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                        aria-valuenow="60"
+                        aria-valuemin="0" 
+                        aria-valuemax="100"
+                        style="width: @Model.TotalSales%;">
+                            <span class="sr-only">60% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="mini-stat clearfix bx-shadow">
+            <span class="mini-stat-icon bg-purple">
+                <i class="ion-ios7-cart"></i>
+            </span>
+            <div class="mini-stat-info text-right text-muted">
+                <span class="counter">@Model.NewOrders</span>
+                سفارش های جدید
+            </div>
+            <div class="tiles-progress">
+                <div class="m-t-20">
+                    <h5 class="text-uppercase">سفارش های جدید <span class="pull-right">@Model.NewOrders%</span></h5>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar progress-bar-purple" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: @Model.NewOrders%;">
+                            <span class="sr-only">90% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="mini-stat clearfix bx-shadow">
+            <span class="mini-stat-icon bg-success">
+                <i class="ion-eye"></i>
+            </span>
+            <div class="mini-stat-info text-right text-muted">
+                <span class="counter">@Model.CollaboratorUsers</span>
+                کاربران همکار
+            </div>
+            <div class="tiles-progress">
+                <div class="m-t-20">
+                    <h5 class="text-uppercase">همکاران <span class="pull-right">@Model.CollaboratorUsers%</span></h5>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: @Model.CollaboratorUsers%;">
+                            <span class="sr-only">60% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="mini-stat clearfix bx-shadow">
+            <span class="mini-stat-icon bg-primary">
+                <i class="ion-android-contacts"></i>
+            </span>
+            <div class="mini-stat-info text-right text-muted">
+                <span class="counter">@Model.TotalUsers</span>
+                تعداد کاربران
+            </div>
+            <div class="tiles-progress">
+                <div class="m-t-20">
+                    <h5 class="text-uppercase"> کاربران <span class="pull-right">@Model.TotalUsers% </span></h5>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: @Model.TotalUsers%;">
+                            <span class="sr-only">57% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+
+    <div class="col-sm-6">
+        <div class="portlet">
+            <div class="portlet-heading">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // 1. تنظیمات پایه
+                const ctx = document.getElementById('salesChart');
+                if (!ctx) {
+                    console.error('عنصر canvas یافت نشد!');
+                    return;
+                }
+
+                // 2. آماده‌سازی داده‌ها
+                const chartData = {
+                    labels: ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+                            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
+                    datasets: [{
+                        label: 'فروش ماهانه (تومان)',
+                        data: @Html.Raw(JsonConvert.SerializeObject(Model.BarLineDataSet.First().Data)),
+                        backgroundColor: '#0077b6',
+                        borderColor: '#023e8a',
+                        borderWidth: 1,
+
+                            // اضافه کردن این سه خط برای افکت hover
+                        hoverBackgroundColor: '#29b6f6', // رنگ روشن‌تر هنگام hover
+                        hoverBorderColor: '#0096C7',     // رنگ حاشیه هنگام hover
+                        hoverBorderWidth: 2              // ضخامت حاشیه هنگام hover
+                    }]
+                };
+
+                // 3. تنظیمات نمودار
+                const options = {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Vazir, Tahoma'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toLocaleString('fa-IR') + ' تومان';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('fa-IR');
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // 4. ایجاد نمودار
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: options
+                });
+
+            } catch (error) {
+                console.error('خطا در ایجاد نمودار:', error);
+            }
+        });
+    </script>
+}

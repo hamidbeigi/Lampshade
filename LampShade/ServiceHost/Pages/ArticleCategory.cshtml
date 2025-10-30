@@ -1,0 +1,178 @@
+﻿@page "{id}"
+@using DNTPersianUtils.Core
+@using _0_Framework.Application
+@model ServiceHost.Pages.ArticleCategoryModel
+@{
+    ViewData["Title"] = "مقالات";
+}
+
+
+<link href="~/theme/assets/css/article-category.css" rel="stylesheet" />
+
+<div class="breadcrumb-area section-space--half">
+    <div class="container wide">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-wrapper breadcrumb-bg">
+                    <div class="breadcrumb-content">
+                        <h1 class="breadcrumb-content__title">@Model.ArticleCategory.Name</h1>
+                        <ul class="breadcrumb-content__page-map">
+                            <li>
+                                <a asp-page="./Index">صفحه اصلی</a>
+                            </li>
+                            <li class="active">@Model.ArticleCategory.Name</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-content-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-wrapper">
+                    <div class="page-content-wrapper">
+                        <div class="row">
+                            <div class="col-lg-9 order-1 order-lg-1">
+                                <div class="blog-page-content">
+                                    <div class="row">
+                                        @foreach (var article in Model.ArticleCategory.Articles)
+                                        {
+                                            <div class="col-md-6">
+                                                <div class="single-blog-post">
+                                                    <div class="single-blog-post__image">
+                                                        @if (article.IsPublished)
+                                                        {
+                                                            <a asp-page="./Article" asp-route-id="@article.Slug">
+                                                                <img src="~/images/@article.Picture" class="img-fluid" alt="@article.PictureAlt" title="@article.Title" />
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/images/@article.Picture" class="img-fluid unpublished" alt="@article.PictureAlt" title="@article.Title" />
+                                                        }
+                                                    </div>
+                                                    <div class="single-blog-post__content">
+                                                        <h3 class="title">
+                                                            @if (article.IsPublished)
+                                                            {
+                                                                <a asp-page="./Article" asp-route-id="@article.Slug">@Html.FaNumbersPlainText(@article.Title)</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="javascript:void(0)" class="disabled-link">@Html.FaNumbersPlainText(@article.Title)</a>
+                                                            }
+                                                        </h3>
+
+                                                        @if (article.IsPublished)
+                                                        {
+                                                            <p class="short-desc">@Html.FaNumbersPlainText(@article.ShortDescription)</p>
+
+                                                            <p class="post-meta small-gap">
+                                                                <span class="date">@Html.FaPersianDate(@article.PublishDate)</span>
+                                                            </p>
+                                                            <a asp-page="./Article" asp-route-id="@article.Slug" class="blog-post-link">ادامه مطلب</a>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <p class="unpublished-message">
+                                                                این مقاله در تاریخ
+                                                                <strong>@Html.FaPersianDate(@article.PublishDate)</strong>
+                                                                منتشر خواهد شد.
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="pagination-area">
+                                    <div class="pagination-area__left">
+                                        نمایش 1 تا 9 از 11 (2 صفحه)
+                                    </div>
+                                    <div class="pagination-area__right">
+                                        <ul class="pagination-section">
+                                            <li>
+                                                <a class="active" href="#">1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">2</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">></a>
+                                            </li>
+                                            <li>
+                                                <a href="#">>|</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 order-2 order-lg-2">
+                                <div class="page-sidebar-wrapper">
+                                    <div class="single-sidebar-widget">
+
+                                        <h4 class="single-sidebar-widget__title">گروه مقالات</h4>
+                                        <ul class="single-sidebar-widget__category-list">
+                                            @foreach (var category in Model.ArticleCategories)
+                                            {
+                                                <li>
+                                                    <a asp-page="./ArticleCategory" asp-route-id="@category.Slug" class="active">
+                                                        @Html.FaNumbersPlainText(@category.Name) <span class="counter">@Html.FaNumbersPlainText(@category.ArticlesCount)</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="single-sidebar-widget">
+
+                                        <h4 class="single-sidebar-widget__title">آخرین مقالات</h4>
+                                        <div class="block-container">
+                                            @foreach (var article in Model.LatestArticles)
+                                            {
+                                                <div class="single-block d-flex">
+                                                    <div class="image">
+                                                        <a asp-page="./Article" asp-route-id="@article.Slug">
+                                                            <img src="~/images/@article.Picture"
+                                                                 class="img-fluid" alt="@article.PictureAlt"
+                                                                 title="@article.PictureTitle" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="">
+                                                        <p>
+                                                            <a asp-page="./Article" asp-route-id="@article.Slug">
+                                                                @Html.FaNumbersPlainText(@article.Title)
+                                                            </a> <span>@Html.FaPersianDate(@article.PublishDate)</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="single-sidebar-widget">
+                                        <h4 class="single-sidebar-widget__title">تگ ها</h4>
+                                        <ul class="single-sidebar-widget__tag-list">
+                                            @foreach (var tag in Model.ArticleCategory.KeywordList)
+                                            {
+                                                <li>
+                                                    <a asp-page="./Search" asp-route-value="@tag">@Html.FaNumbersPlainText(@tag)</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

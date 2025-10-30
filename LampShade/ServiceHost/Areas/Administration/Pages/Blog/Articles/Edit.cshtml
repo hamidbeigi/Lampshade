@@ -1,0 +1,127 @@
+﻿@page
+@model ServiceHost.Areas.Administration.Pages.Blog.Articles.EditModel
+@{
+    Layout = "Shared/_AdminLayout";
+    ViewData["Title"] = "ویرایش مقاله";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">ویرایش مقاله: @Model.RegisterModel.Title</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.Title" class="control-label">نام</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.Title" onchange="makeSlug('Title', 'Slug')">
+                                <span asp-validation-for="RegisterModel.Title" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.Slug" class="control-label">اسلاگ</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.Slug">
+                                <span asp-validation-for="RegisterModel.Slug" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.PublishDate" class="control-label">تاریخ انتشار</label>
+                                <input class="form-control persianDateInput" asp-for="RegisterModel.PublishDate">
+                                <span asp-validation-for="RegisterModel.PublishDate" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.Picture" class="control-label">عکس</label>
+                                <input type="file" class="form-control" asp-for="RegisterModel.Picture" accept="image/*">
+                                <span asp-validation-for="RegisterModel.Picture" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.CategoryId">گروه مقاله</label>
+                                <select class="form-control" asp-for="RegisterModel.CategoryId" asp-items="Model.ArticleCategories">
+                                    <option value="0">گروه مقاله ...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.PictureAlt" class="control-label">Alt</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.PictureAlt">
+                                <span asp-validation-for="RegisterModel.PictureAlt" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.PictureTitle" class="control-label">عنوان</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.PictureTitle">
+                                <span asp-validation-for="RegisterModel.PictureTitle" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label asp-for="RegisterModel.ShortDescription" class="control-label">توضیحات کوتاه</label>
+                                <textarea class="form-control autogrow" asp-for="RegisterModel.ShortDescription" onchange="fillField('ShortDescription', 'MetaDescription')"
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                <span asp-validation-for="RegisterModel.ShortDescription" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label asp-for="RegisterModel.Description" class="control-label">توضیحات</label>
+                                <textarea class="form-control" id="BodyContent" asp-for="RegisterModel.Description">@Html.Raw(Model.RegisterModel.Description)</textarea>
+                                <span asp-validation-for="RegisterModel.Description" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.Keywords" class="control-label">کلمات کلیدی</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.Keywords">
+                                <span asp-validation-for="RegisterModel.Keywords" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label asp-for="RegisterModel.MetaDescription" class="control-label">توضیحات متا</label>
+                                <textarea class="form-control autogrow" asp-for="RegisterModel.MetaDescription"
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                <span asp-validation-for="RegisterModel.MetaDescription" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.CanonicalAddress" class="control-label">CanonicalAddress</label>
+                                <input type="text" class="form-control" asp-for="RegisterModel.CanonicalAddress">
+                                <span asp-validation-for="RegisterModel.CanonicalAddress" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @* <input type="hidden" asp-for="RegisterModel.Id" value="RegisterModel.Id" /> *@
+                    <input type="hidden" asp-for="RegisterModel.Id" />
+                    <button type="submit" class="btn btn-success waves-effect waves-light m-b-5">ویرایش</button>
+                    <a asp-page="./Index" class="btn btn-dark waves-effect waves-light m-b-5">بازگشت</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

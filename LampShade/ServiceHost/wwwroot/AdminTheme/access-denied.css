@@ -1,0 +1,62 @@
+﻿font-face {
+    font-family: 'IranSans';
+    src: url('/AdminTheme/fonts/IRANSans.woff2') format('woff2'); /* یا woff یا ttf بسته به فایل */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'IranSans', sans-serif;
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.icon {
+    width: 80px;
+    height: 80px;
+    background-color: #e53935;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+    .icon::before {
+        content: "!";
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+a {
+    text-decoration: none;
+    color: #e53935;
+    font-weight: bold;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }

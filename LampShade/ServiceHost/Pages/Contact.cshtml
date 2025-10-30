@@ -1,0 +1,92 @@
+﻿@page
+@model ServiceHost.Pages.ContactModel
+@using _0_Framework.Application;
+@{
+    // ViewData["Title"] = "تماس با ما";
+     Layout = "_Layout";
+    ViewData["BodyClass"] = "contact-page";
+}
+
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>تماس با ما | EPOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link href="~/theme/assets/css/contact.css" rel="stylesheet" />
+
+
+</head>
+<body>
+
+    <header>
+        <h1>تماس با ما</h1>
+    </header>
+
+
+    <div class="container">
+
+        <div class="contact-info">
+            <h2>راه‌های ارتباطی</h2>
+
+            <p><i class="fas fa-map-marker-alt icon"></i> آدرس: گیلان، تالش، خیابان امام خمینی، پلاک ۱۲</p>
+            <p><i class="fas fa-phone-alt icon"></i> شماره تماس: @Tools.ToPersianNumbers("013-4426-1234")</p>
+            <p><i class="fas fa-envelope icon"></i> ایمیل: hamid_beigi@yahoo.com</p>
+            <p><i class="fas fa-clock icon"></i> ساعات پاسخگویی: همه روزه به جز جمعه‌ها، ۹ تا ۱۸</p>
+        </div>
+
+
+
+
+        <div class="contact-form">
+            @if (ViewData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewData["SuccessMessage"]
+                </div>
+            }
+            <h2>ارسال پیام</h2>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="ContactForm.Name"></label>
+                    <input asp-for="ContactForm.Name" class="form-control" />
+                    <span asp-validation-for="ContactForm.Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ContactForm.Email"></label>
+                    <input asp-for="ContactForm.Email" class="form-control" />
+                    <span asp-validation-for="ContactForm.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ContactForm.Subject"></label>
+                    <input asp-for="ContactForm.Subject" class="form-control" />
+                    <span asp-validation-for="ContactForm.Subject" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ContactForm.Message"></label>
+                    <textarea asp-for="ContactForm.Message" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="ContactForm.Message" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">ارسال پیام</button>
+            </form>
+        </div>
+
+        <iframe src="https://maps.google.com/maps?q=37.79748369151155,48.90411331704645&z=13&ie=UTF8&iwloc=&output=embed"
+                allowfullscreen=""
+                loading="lazy"></iframe>
+
+    </div>
+    
+</body>
+
+</html>

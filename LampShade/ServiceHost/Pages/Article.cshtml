@@ -1,0 +1,251 @@
+﻿@page "{id}"
+@using DNTPersianUtils.Core
+@model ServiceHost.Pages.ArticleModel
+@{
+    ViewData["Title"] = Model.Article.Title;
+    ViewData["keywords"] = Model.Article.Keywords;
+    ViewData["metaDescription"] = Model.Article.MetaDescription;
+}
+
+
+<div class="breadcrumb-area section-space--half">
+    <div class="container wide">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-wrapper breadcrumb-bg">
+                    <div class="breadcrumb-content">
+                        <h1 class="breadcrumb-content__title">@Html.FaNumbersPlainText(@Model.Article.Title)</h1>
+                        <ul class="breadcrumb-content__page-map">
+                            <li>
+                                <a asp-page="/Index">صفحه اصلی</a>
+                            </li>
+                            <li>
+                                <a asp-page="/ArticleCategory" asp-route-id="@Model.Article.CategorySlug">@Html.FaNumbersPlainText(@Model.Article.CategoryName)</a>
+                            </li>
+                            <li>@Html.FaNumbersPlainText(@Model.Article.Title)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-content-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-wrapper">
+                    <div class="page-content-wrapper">
+                        <div class="row">
+                            <div class="col-lg-9 order-1 order-lg-1">
+                                <div class="blog-page-content">
+                                    <div class="blog-single-post-container">
+                                        <h3 class="post-title">@Html.FaNumbersPlainText(@Model.Article.Title)</h3>
+                                        <div class="post-meta">
+                                            <p>
+                                                <span>
+                                                    <i class="fa fa-calendar"></i> نوشته شده در: @Html.FaPersianDate(@Model.Article.PublishDate)
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                        <div class="single-blog-post-media">
+                                            <div class="image">
+                                                <img src="~/images/@Model.Article.Picture" class="img-fluid" alt="@Model.Article.PictureAlt" title="@Model.Article.Title">
+                                            </div>
+                                        </div>
+
+                                        <div class="post-content">
+                                              @Html.FaNumbersHtml(Model.Article.Description)
+                                        </div>
+
+                                        <div class="tag-area">
+                                            <span>تگ ها: </span>
+                                            <ul>
+                                                @foreach (var tag in Model.Article.KeywordList)
+                                                {
+                                                    <li>
+                                                        <a asp-page="/Search" asp-route-value="@tag">@tag</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+
+                                        <div class="social-share-buttons">
+                                            <h3>اشتراک گذاری این مقاله</h3>
+                                            <ul>
+                                                <li>
+                                                    <a class="twitter" href="#">
+                                                        <i class="fa fa-twitter"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="facebook" href="#">
+                                                        <i class="fa fa-facebook"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="google-plus" href="#">
+                                                        <i class="fa fa-google-plus"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="pinterest" href="#">
+                                                        <i class="fa fa-pinterest"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="comment-section">
+                                        <h3 class="comment-counter">نظرات (@Model.Article.Comments.Count)</h3>
+                                        <div class="comment-container">
+                                            @foreach (var comment in Model.Article.Comments)
+                                            {
+                                                <div class="single-comment" id="comment-@comment.Id">
+                                                    <span class="reply-btn">
+                                                        <a href="#postComment" onclick='$("#commentParentId").val(@comment.Id)'>پاسخ</a>
+                                                    </span>
+                                                    <div class="image">
+                                                        <img src="~/Theme/assets/img/blog/comment-icon.png" alt="" width="50" height="50">
+                                                    </div>
+                                                    <div class="content">
+                                                        <h3 class="user">
+                                                            @comment.Name <span class="comment-time">
+                                                                @comment.CreationDate
+                                                            </span>
+                                                        </h3>
+                                                        @if (comment.ParentId > 0)
+                                                        {
+                                                            <p>
+                                                                <span>در پاسخ به: </span><a href="#comment-@comment.ParentId">@comment.parentName</a>
+                                                            </p>
+                                                        }
+                                                        <p class="comment-text">@comment.Message</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <div class="comment-form-container">
+                                            <h3 class="comment-form-title">نظر خود را با ما به اشتراک بگذارید</h3>
+                                            <p>
+                                                ایمیل وارده شده توسط شما به صورت محرمانه است و به دیگران نمایش داده نخواهد شد.
+                                            </p>
+                                            <div class="comment-form" id="postComment">
+                                                <form method="post">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label asp-for="Comment.Message">نظر شما</label>
+                                                                <textarea asp-for="Comment.Message" placeholder="نظر خود را بنویسید..."></textarea>
+                                                                <span asp-validation-for="Comment.Message" class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label asp-for="Comment.Name">نام</label>
+                                                                <input asp-for="Comment.Name" placeholder="مثال: حمید بیگی">
+                                                                <span asp-validation-for="Comment.Name" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label asp-for="Comment.Email">ایمیل</label>
+                                                                <input asp-for="Comment.Email" placeholder="مثال: contact@hamidsoft.com">
+                                                                <span asp-validation-for="Comment.Email" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label asp-for="Comment.Website">وبسایت</label>
+                                                                <input asp-for="Comment.Website" placeholder="مثال: http://www.hamidsoft.com">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" asp-for="Comment.OwnerRecordId" value="@Model.Article.Id" />
+                                                        <input type="hidden" name="articleSlug" value="@Model.Article.Slug" />
+                                                        <input type="hidden" asp-for="Comment.ParentId" id="commentParentId" value="0" />
+                                                        <div class="col-lg-12">
+                                                            <button type="submit" class="comment-btn" name="submit">
+                                                                ارسال
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 order-2 order-lg-2">
+                                <div class="page-sidebar-wrapper">
+                                    <div class="single-sidebar-widget">
+
+                                        <h4 class="single-sidebar-widget__title">گروه مقالات</h4>
+                                        <ul class="single-sidebar-widget__category-list">
+                                            @foreach (var category in Model.ArticleCategories)
+                                            {
+                                                <li>
+                                                    <a asp-page="./ArticleCategory" asp-route-id="@category.Slug" class="active">
+                                                        @category.Name <span class="counter">@category.ArticlesCount</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    <div class="single-sidebar-widget">
+
+                                        <h4 class="single-sidebar-widget__title">آخرین مقالات</h4>
+                                        <div class="block-container">
+                                            @foreach (var article in Model.LatestArticles)
+                                            {
+                                                <div class="single-block d-flex">
+                                                    <div class="image">
+                                                        <a asp-page="./Article" asp-route-id="@article.Slug">
+                                                            <img src="~/images/@article.Picture"
+                                                                 class="img-fluid" alt="@article.PictureAlt"
+                                                                 title="@article.PictureTitle">
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <p>
+                                                            <a asp-page="./Article" asp-route-id="@article.Slug">
+                                                                @article.Title
+                                                            </a> <span>@article.PublishDate</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!--=======  single sidebar widget  =======-->
+                                    <div class="single-sidebar-widget">
+                                        <h4 class="single-sidebar-widget__title">تگ ها</h4>
+                                        <ul class="single-sidebar-widget__tag-list">
+
+                                            @foreach (var tag in Model.Article.KeywordList)
+                                            {
+                                                <li>
+                                                    <a asp-page="/Search" asp-route-value="@tag">@tag</a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </div>
+                                    <!--=======  End of single sidebar widget  =======-->
+                                </div>
+                                <!--=======  End of page sidebar wrapper  =======-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--=======  End of page wrapper  =======-->
+            </div>
+        </div>
+    </div>
+</div>
